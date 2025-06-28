@@ -13,6 +13,11 @@ const char* sv_request(const char* request) {
     thread_local sevilla::http_client http_client;
     thread_local std::string result;
 
+    if (request == nullptr) {
+        result = "";
+        return result.c_str();
+    }
+
     try {
         http_client.reset();
         nlohmann::json req = nlohmann::json::parse(request);
@@ -49,25 +54,28 @@ const char* sv_request(const char* request) {
             j["status_code"] = http_client.status_code;
             j["body"] = http_client.response_body;
             result = j.dump();
-            return result.c_str();
         } else {
             std::ostringstream os;
             os << "Error " << http_client.error << ": " << http_client.error_message;
             result = make_error(os.str());
-            return result.c_str();
         }
     } catch (std::exception& e) {
         result = make_error(e.what());
-        return result.c_str();
     } catch (...) {
         result = make_error("Unknown exception");
-        return result.c_str();
     }
+
+    return result.c_str();
 }
 
 extern "C" DLL_EXPORT
 const wchar_t* sv_request_w(const wchar_t* request) {
     thread_local std::wstring converted;
+
+    if (request == nullptr) {
+        converted = L"";
+        return converted.c_str();
+    }
 
     // utf-8/utf-16 converter
     std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
@@ -77,9 +85,9 @@ const wchar_t* sv_request_w(const wchar_t* request) {
         // convert to std::string assuming utf-8
         const std::string u8_request = converter.to_bytes(ws_request);
         converted = converter.from_bytes(sv_request(u8_request.c_str()));
-        return converted.c_str();
     } catch (...) {
         converted = converter.from_bytes(make_error("UTF conversion exception"));
-        return converted.c_str();
     }
+
+    return converted.c_str();
 }

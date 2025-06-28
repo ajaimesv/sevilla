@@ -31,6 +31,11 @@ namespace sevilla {
          */
         size_t size() const;
 
+        /**
+         * Resets the class's inner state.
+         */
+        void reset();
+
     };
 
 }

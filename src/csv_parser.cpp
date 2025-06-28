@@ -51,4 +51,8 @@ namespace sevilla {
         return fields.size();
     }
 
+    void csv_parser::reset() {
+        fields.clear();
+    }
+
 }
