@@ -1,0 +1,7 @@
+{
+  "name": "sevilla",
+  "version": "0.1.0",
+  "dependencies": [
+    "curl",
+    "catch2", "cpp-httplib" ]
+}
