@@ -49,6 +49,7 @@ add_executable(sevilla_tests
         tests/http_client_test.cpp
         tests/email_client_test.cpp
         tests/utils_test.cpp
+        tests/utils_c_api_test.cpp
 )
 
 target_link_libraries(sevilla_tests PRIVATE
