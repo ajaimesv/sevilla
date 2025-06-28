@@ -18,6 +18,7 @@ set(SOURCES
         src/email_client_c_api.cpp
         src/utils.cpp
         src/utils.h
+        src/utils_c_api.cpp
 )
 
 # Static version, for unit testing

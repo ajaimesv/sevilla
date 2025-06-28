@@ -10,12 +10,12 @@
 thread_local sevilla::csv_parser csv_parser;
 
 extern "C" DLL_EXPORT
-size_t sevilla_csv_parse_line(const char* line, const char separator) {
+size_t scsv_parse_line(const char* line, const char separator) {
     return csv_parser.parse_line(line, separator);
 }
 
 extern "C" DLL_EXPORT
-size_t sevilla_csv_parse_line_wchar_t(const wchar_t* line, const wchar_t separator) {
+size_t scsv_parse_line_w(const wchar_t* line, const wchar_t separator) {
     // utf-8/utf-16 converter
     std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
 
@@ -25,19 +25,19 @@ size_t sevilla_csv_parse_line_wchar_t(const wchar_t* line, const wchar_t separat
         const std::string u8_line = converter.to_bytes(ws_line);
         // do a simple conversion for the separator, since we expect ASCII
         const char sep = separator <= 127 ? static_cast<char>(separator) : ',';
-        return sevilla_csv_parse_line(u8_line.c_str(), sep);
+        return scsv_parse_line(u8_line.c_str(), sep);
     } catch (...) {
         return -1;
     }
 }
 
 extern "C" DLL_EXPORT
-size_t sevilla_csv_field_size() {
+size_t scsv_field_count() {
     return csv_parser.size();
 }
 
 extern "C" DLL_EXPORT
-const char* sevilla_csv_field(size_t index) {
+const char* scsv_field(size_t index) {
     try {
         return csv_parser[index].c_str();
     } catch (...) {
@@ -46,7 +46,7 @@ const char* sevilla_csv_field(size_t index) {
 }
 
 extern "C" DLL_EXPORT
-const wchar_t* sevilla_csv_field_wchar_t(size_t index) {
+const wchar_t* scsv_field_w(size_t index) {
     thread_local std::wstring converted;
 
     // utf-8/utf-16 converter
