@@ -33,23 +33,25 @@ const char* sv_send_email(const char* request) {
             email_client.password = req["password"];
         if (req.contains("subject") && req["subject"].is_string())
             email_client.subject = req["subject"];
-        if (req.contains("body") && req["body"].is_string())
-            email_client.body = req["body"];
+        if (req.contains("message") && req["message"].is_string())
+            email_client.message = req["message"];
         if (req.contains("sender") && req["sender"].is_object()) {
-            email_client.sender = req.at("sender").get<std::map<std::string, std::string>>();
-            if (email_client.sender.size() != 1)
-                throw std::invalid_argument("Sender: invalid value. There must be exactly one sender.");
+            const auto sender_map = req.at("sender").get<std::map<std::string, std::string>>();
+            if (!sender_map.empty()) {
+                auto it = sender_map.begin();
+                std::string email = it->first;
+                std::string name = it->second;
+                email_client.set_sender(email, name);
+            } else throw std::invalid_argument("Sender: invalid value. Cannot be empty.");
         }
         if (req.contains("recipients") && req["recipients"].is_object())
-            email_client.recipients = req.at("recipients").get<std::map<std::string, std::string>>();
+            email_client.set_recipients(req.at("recipients").get<std::map<std::string, std::string>>());
         if (req.contains("cc_recipients") && req["cc_recipients"].is_object())
-            email_client.cc_recipients = req.at("cc_recipients").get<std::map<std::string, std::string>>();
-        if (req.contains("bcc_recipients") && req["bcc_recipients"].is_number_integer())
-            email_client.bcc_recipients = req["bcc_recipients"];
+            email_client.set_cc_recipients(req.at("cc_recipients").get<std::map<std::string, std::string>>());
+        if (req.contains("bcc_recipients") && req["bcc_recipients"].is_object())
+            email_client.set_bcc_recipients(req["bcc_recipients"].get<std::map<std::string, std::string>>());
 
-        if (email_client.recipients.size() == 0 &&
-            email_client.cc_recipients.size() == 0 &&
-            email_client.bcc_recipients.size() == 0) {
+        if (email_client.total_recipients() == 0) {
             throw std::invalid_argument("Recipients: invalid value. There must be at least one recipient, either regular, cc, or bcc.");
         }
 
