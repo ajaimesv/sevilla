@@ -66,6 +66,15 @@ namespace sevilla {
         int error;
         std::string error_message;
 
+        /*
+         * Total process timeout: connection + server response.
+         */
+        long max_timeout = 30000; // milliseconds
+        /*
+         * Connection only timeout.
+         */
+        long connection_timeout = 10000; // milliseconds
+
         void set_sender(const std::string& email, const std::string& name);
         void set_recipients(const std::map<std::string, std::string>& recipients);
         void set_cc_recipients(const std::map<std::string, std::string>& recipients);

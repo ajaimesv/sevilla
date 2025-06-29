@@ -219,6 +219,10 @@ namespace sevilla {
             }
             curl_easy_setopt(curl, CURLOPT_MAIL_RCPT, recips);
 
+            // Timeout
+            curl_easy_setopt(curl, CURLOPT_TIMEOUT_MS, max_timeout);
+            curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT_MS, connection_timeout);
+
             // Prepare the callback function that sends the body
             payload_offset = 0;  // reset before sending
             curl_easy_setopt(curl, CURLOPT_READFUNCTION, payload_source);

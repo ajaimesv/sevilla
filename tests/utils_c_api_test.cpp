@@ -6,6 +6,14 @@
 #include <catch2/catch_test_macros.hpp>
 #include <wchar.h>
 
+#if defined(_WIN32)
+    #define LIBNAME "sevilla.dll"
+#elif defined(__APPLE__)
+    #define LIBNAME "libsevilla.dylib"
+#else
+    #define LIBNAME "libsevilla.so"
+#endif
+
 struct LoaderFixture {
 
     typedef const char* (*slugify_func)(const char*);
@@ -16,7 +24,7 @@ struct LoaderFixture {
 
     // load the dynamic library
     LoaderFixture() {
-        handle = dlopen("../cmake-build-debug/libsevilla.dylib", RTLD_NOW);
+        handle = dlopen(LIBNAME, RTLD_NOW);
         if (handle != nullptr) {
             slugify = reinterpret_cast<slugify_func>(dlsym(handle, "sv_slugify"));
             slugify_w = reinterpret_cast<slugify_w_func>(dlsym(handle, "sv_slugify_w"));

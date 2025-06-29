@@ -50,14 +50,27 @@ To set it up in CLion, follow the instructions from this page, it's very simple:
 To set it up from the command line, enter the following commands from the project's directory: 
 
 ```shell
-cd sevilla
-cmake -S . \
-      -B build \
-      -DCMAKE_TOOLCHAIN_FILE="/full/path/to/vcpkg/scripts/buildsystems/vcpkg.cmake"
-cmake --build build
+cd sevilla[Makefile](build/Makefile)
+mkdir build
+cd build
+cmake .. \ 
+  -DCMAKE_TOOLCHAIN_FILE="/full/path/to/vcpkg/scripts/buildsystems/vcpkg.cmake"
+make
 ```
 
 Notice that the build directory for the previous example is `build`, which differs from the default used by CLion and VisualStudio.
+
+To generate a release version:
+```shell
+mkdir build
+cd build
+cmake .. \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_TOOLCHAIN_FILE="/full/path/to/vcpkg/scripts/buildsystems/vcpkg.cmake"
+make
+```
+
+Note: A common option for the release version directory is `build_release`.
 
 ### References
 - https://learn.microsoft.com/en-us/vcpkg/users/buildsystems/cmake-integration
