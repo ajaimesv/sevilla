@@ -27,6 +27,8 @@ const char* sv_send_email(const char* request) {
             email_client.host = req["host"];
         if (req.contains("port") && req["port"].is_number_integer())
             email_client.port = req["port"];
+        if (req.contains("use_tls") && req["use_tls"].is_boolean())
+            email_client.use_tls = req["use_tls"];
         if (req.contains("username") && req["username"].is_string())
             email_client.username = req["username"];
         if (req.contains("password") && req["password"].is_string())

@@ -62,6 +62,7 @@ namespace sevilla {
 
         std::string subject;
         std::string message;
+        bool use_tls = true; // use tls by default
 
         int error;
         std::string error_message;
@@ -90,7 +91,7 @@ namespace sevilla {
 
         size_t total_recipients() const;
         static bool is_valid_email(const std::string& email);
-        static std::string build_url(const std::string& host, const int port);
+        static std::string build_url(const std::string& host, const int port, const bool use_tls);
         static std::string normalize_email(const std::string& email);
         static std::string build_display_email(const std::string& email, const std::string& name);
         static std::string generate_date();

@@ -54,7 +54,7 @@ cd sevilla[Makefile](build/Makefile)
 mkdir build
 cd build
 cmake .. \ 
-  -DCMAKE_TOOLCHAIN_FILE="/full/path/to/vcpkg/scripts/buildsystems/vcpkg.cmake"
+  -DCMAKE_TOOLCHAIN_FILE=/full/path/to/vcpkg/scripts/buildsystems/vcpkg.cmake
 make
 ```
 
@@ -66,7 +66,7 @@ mkdir build
 cd build
 cmake .. \
     -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_TOOLCHAIN_FILE="/full/path/to/vcpkg/scripts/buildsystems/vcpkg.cmake"
+    -DCMAKE_TOOLCHAIN_FILE=/full/path/to/vcpkg/scripts/buildsystems/vcpkg.cmake
 make
 ```
 

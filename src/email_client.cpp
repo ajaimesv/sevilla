@@ -52,9 +52,9 @@ namespace sevilla {
         return std::regex_match(email, pattern);
     }
 
-    std::string email_client::build_url(const std::string& host, const int port) {
+    std::string email_client::build_url(const std::string& host, const int port, const bool use_tls) {
         // Port 587 is commonly used for secure mail submission (see RFC 4403)
-        const int p = port > 0 ? port : 587;
+        const int p = port > 0 ? port : (use_tls ? 587: 25);
         std::ostringstream url;
         url << "smtp://" << host << ":" << p;
         return url.str();
@@ -192,10 +192,11 @@ namespace sevilla {
             curl_easy_setopt(curl, CURLOPT_PASSWORD, password.c_str());
 
             // Server
-            curl_easy_setopt(curl, CURLOPT_URL, build_url(host, port).c_str());
+            curl_easy_setopt(curl, CURLOPT_URL, build_url(host, port, use_tls).c_str());
 
             // STARTTLS
-            curl_easy_setopt(curl, CURLOPT_USE_SSL, CURLUSESSL_ALL);
+            if (use_tls)
+                curl_easy_setopt(curl, CURLOPT_USE_SSL, CURLUSESSL_ALL);
 
             #if defined(_WIN32)
             // Windows needs the agencies file, unless curl is compiled to use the host's one.

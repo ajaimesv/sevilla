@@ -86,18 +86,13 @@ TEST_CASE("build_recipient_list function", "[email_client][build_recipient_list]
 TEST_CASE("build_url function", "[email_client][build_url]") {
 
     SECTION("build_url must build a url when port is 0") {
-        const std::string result = sevilla::email_client::build_url("host", 0);
-        REQUIRE(result == "smtp://host:587");
-    }
+        REQUIRE(sevilla::email_client::build_url("host", 0, true) == "smtp://host:587");
+        REQUIRE(sevilla::email_client::build_url("host", 8080, true) == "smtp://host:8080");
+        REQUIRE(sevilla::email_client::build_url("host", -10, true) == "smtp://host:587");
+        REQUIRE(sevilla::email_client::build_url("host", 0, false) == "smtp://host:25");
+        REQUIRE(sevilla::email_client::build_url("host", 8080, false) == "smtp://host:8080");
+        REQUIRE(sevilla::email_client::build_url("host", -10, false) == "smtp://host:25");
 
-    SECTION("build_url must build a url when port is NOT 0") {
-        const std::string result = sevilla::email_client::build_url("host", 8080);
-        REQUIRE(result == "smtp://host:8080");
-    }
-
-    SECTION("build_url must build a url when port is negative") {
-        const std::string result = sevilla::email_client::build_url("host", -10);
-        REQUIRE(result == "smtp://host:587");
     }
 
 }
